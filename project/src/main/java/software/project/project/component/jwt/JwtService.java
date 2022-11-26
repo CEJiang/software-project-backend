@@ -75,4 +75,9 @@ public class JwtService {
                             .getBody();
         return (String) claims.get("userID");                    
     }
+
+    public String refreshToken(JwtMemberAccount userDetails){
+
+        return generateToken(userDetails);
+    }
 }

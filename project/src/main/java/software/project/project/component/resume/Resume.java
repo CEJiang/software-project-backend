@@ -2,11 +2,15 @@ package software.project.project.component.resume;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Document("resumes")
 public class Resume {
     
@@ -39,51 +43,51 @@ public class Resume {
     private String refreshTime; // 更新時間
     private int order; // 序號 ( 最多五個 )
 
-    public Resume(
-        String title,
-        String name,
-        String sex,
-        String birth,
-        String phoneNumber,
-        String email,
-        String school,
-        String department,
-        String status,
-        String year,
-        String nature,
-        String type,
-        String time,
-        String salary,
-        String region,
-        String introduction,
-        String id,
-        String user,
-        String createTime,
-        String refreshTime,
-        int order
-    ){
-        this.title = title;
-        this.name = name;
-        this.sex = sex;
-        this.birth = birth;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.school = school;
-        this.department = department;
-        this.status = status;
-        this.year = year;
-        this.nature = nature;
-        this.type = type;
-        this.time = time;
-        this.salary = salary;
-        this.region = region;
-        this.introduction = introduction;
-        this.id = id;
-        this.user = user;
-        this.createTime = createTime;
-        this.refreshTime = refreshTime;
-        this.order = order;
-    }
+    // public Resume(
+    //     String title,
+    //     String name,
+    //     String sex,
+    //     String birth,
+    //     String phoneNumber,
+    //     String email,
+    //     String school,
+    //     String department,
+    //     String status,
+    //     String year,
+    //     String nature,
+    //     String type,
+    //     String time,
+    //     String salary,
+    //     String region,
+    //     String introduction,
+    //     String id,
+    //     String user,
+    //     String createTime,
+    //     String refreshTime,
+    //     int order
+    // ){
+    //     this.title = title;
+    //     this.name = name;
+    //     this.sex = sex;
+    //     this.birth = birth;
+    //     this.phoneNumber = phoneNumber;
+    //     this.email = email;
+    //     this.school = school;
+    //     this.department = department;
+    //     this.status = status;
+    //     this.year = year;
+    //     this.nature = nature;
+    //     this.type = type;
+    //     this.time = time;
+    //     this.salary = salary;
+    //     this.region = region;
+    //     this.introduction = introduction;
+    //     this.id = id;
+    //     this.user = user;
+    //     this.createTime = createTime;
+    //     this.refreshTime = refreshTime;
+    //     this.order = order;
+    // }
 }
 
 

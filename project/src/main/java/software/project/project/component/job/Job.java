@@ -4,11 +4,15 @@ import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Document("jobs")
 public class Job {
     // 基本資料
@@ -37,44 +41,44 @@ public class Job {
     private String refreshTime; // 更新時間
     private int order; // 序號 ( 最多三個 )
 
-    public Job(
-        String title,
-        String name,
-        String sex,    
-        String phoneNumber,
-        String email,
-        String nature,
-        String type,
-        String content,
-        List<String> date,
-        List<String> time,
-        String salary,
-        String region,
-        String salaryMethod,
-        String salaryDate,
-        String id,
-        String user,
-        String createTime,
-        String refreshTime,
-        int order){
-            this.title = title;
-            this.name = name;
-            this.sex = sex;    
-            this.phoneNumber = phoneNumber;
-            this.email = email;
-            this.nature = nature;
-            this.type = type;
-            this.content = content;
-            this.date = date;
-            this.time = time;
-            this.salary = salary;
-            this.region = region;
-            this.salaryMethod = salaryMethod;
-            this.salaryDate = salaryDate;
-            this.id = id;
-            this.user = user;
-            this.createTime = createTime;
-            this.refreshTime = refreshTime;
-            this.order = order;
-        }
+    // public Job(
+    //     String title,
+    //     String name,
+    //     String sex,    
+    //     String phoneNumber,
+    //     String email,
+    //     String nature,
+    //     String type,
+    //     String content,
+    //     List<String> date,
+    //     List<String> time,
+    //     String salary,
+    //     String region,
+    //     String salaryMethod,
+    //     String salaryDate,
+    //     String id,
+    //     String user,
+    //     String createTime,
+    //     String refreshTime,
+    //     int order){
+    //         this.title = title;
+    //         this.name = name;
+    //         this.sex = sex;    
+    //         this.phoneNumber = phoneNumber;
+    //         this.email = email;
+    //         this.nature = nature;
+    //         this.type = type;
+    //         this.content = content;
+    //         this.date = date;
+    //         this.time = time;
+    //         this.salary = salary;
+    //         this.region = region;
+    //         this.salaryMethod = salaryMethod;
+    //         this.salaryDate = salaryDate;
+    //         this.id = id;
+    //         this.user = user;
+    //         this.createTime = createTime;
+    //         this.refreshTime = refreshTime;
+    //         this.order = order;
+    //     }
 }

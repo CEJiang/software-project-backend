@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import software.project.project.component.exception.NotFoundException;
 import software.project.project.component.jwt.JwtMemberAccount;
 import software.project.project.component.jwt.JwtService;
 import software.project.project.component.jwt.JwtUserDetailsServiceImpl;
 
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +25,8 @@ public class MemberService {
     private MemberRepository memberRepository;
     private JwtUserDetailsServiceImpl jwtUserDetailsServiceImpl;
     private JwtService jwtService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @Autowired
     public MemberService(
@@ -37,7 +41,7 @@ public class MemberService {
     public MemberAccount register(MemberAccount request) {
         
         if(findMemberInformations(request) != null){
-            return null;
+            throw new NotFoundException("");
         }
 
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -52,13 +56,14 @@ public class MemberService {
 
         return memberRepository.insert(MemberInformations);
     }
+
     public String login(MemberAccount request){
-        // JwtService JwtService = new JwtService();
         JwtMemberAccount userDetails = jwtUserDetailsServiceImpl.loadUserByUsername(request.getUserID());
-        Authentication auth = new UsernamePasswordAuthenticationToken(userDetails, 
-				request.getPassword(), userDetails.getAuthorities());
-		//將Authentication物件放入SecurityContext存放
-		SecurityContextHolder.getContext().setAuthentication(auth); 
+        Authentication authToken = new UsernamePasswordAuthenticationToken(request.getUserID(), request.getPassword());
+
+        Authentication auth = authenticationManager.authenticate(authToken);
+
+        SecurityContextHolder.getContext().setAuthentication(auth); 
 
         String token = jwtService.generateToken(userDetails);
 
@@ -66,13 +71,11 @@ public class MemberService {
     }
 
     public String refresh(String oldToken) {
-        // final String token = oldToken.substring(tokenHead.length());
-        // String username = jwtService.getUserIDFromToken(token);
-        // JwtMemberAccount user = (JwtMemberAccount) jwtUserDetailsServiceImpl.loadUserByUsername(username);
-        // if (jwtService.canTokenBeRefreshed(token, user.getLastPasswordResetDate())){
-        //     return jwtService.refreshToken(token);
-        // }
-        return null;
+        // String tokenHeader = oldToken.substring(tokenHead.length());
+        String username = jwtService.getUserIDFromToken(oldToken);
+        JwtMemberAccount user = (JwtMemberAccount) jwtUserDetailsServiceImpl.loadUserByUsername(username);
+        String token = jwtService.refreshToken(user);
+        return token;
     }
     public MemberAccount findMemberInformations(MemberAccount request) {
         return memberRepository.findByUserID(request.getUserID());

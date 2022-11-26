@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import software.project.project.component.exception.NotFoundException;
 import software.project.project.component.member.MemberAccount;
 import software.project.project.component.member.MemberRepository;
 

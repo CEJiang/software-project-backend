@@ -41,7 +41,6 @@ public class Resume {
     private String user; // 用戶名
     private String createTime; // 創立時間
     private String refreshTime; // 更新時間
-    private int order; // 序號 ( 最多五個 )
 
     // public Resume(
     //     String title,

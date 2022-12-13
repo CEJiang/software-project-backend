@@ -22,9 +22,9 @@ public class ResumeController {
     @Autowired
     private ResumeService ResumeService;
 
-    @GetMapping("/auth/Resumes/{user}/{order}")
-    public ResponseEntity<Resume> getResume(@PathVariable("user") String user, @PathVariable("order") int order) {
-        Resume Resume = ResumeService.getResume(user, order);
+    @GetMapping("/auth/Resumes/{user}/{createTime}")
+    public ResponseEntity<Resume> getResume(@PathVariable("user") String user, @PathVariable("createTime") String createTime) {
+        Resume Resume = ResumeService.getResume(user, createTime);
         System.out.println(Resume);
         return ResponseEntity.ok(Resume);
     }
@@ -55,18 +55,18 @@ public class ResumeController {
         return ResponseEntity.created(location).body(Resume);
     }
 
-    @PutMapping("/auth/Resumes/{user}/{order}")
+    @PutMapping("/auth/Resumes/{user}/{createTime}")
     public ResponseEntity<Resume> replaceResume(
-            @PathVariable("user") String user, @PathVariable("order") int order, @RequestBody Resume request) {
-            Resume Resume = ResumeService.replaceResume(user, order, request);
+            @PathVariable("user") String user, @PathVariable("createTime") String createTime, @RequestBody Resume request) {
+            Resume Resume = ResumeService.replaceResume(user, createTime, request);
 
         return ResponseEntity.ok(Resume);
     }
 
-    @DeleteMapping("/auth/Resumes/{user}/{order}")
-    public ResponseEntity<Resume> deleteResume(@PathVariable("user") String user, @PathVariable("order") int order) {
-        System.out.println("Delete user = " + user + " order = " + order);
-        ResumeService.deleteResume(user, order);
+    @DeleteMapping("/auth/Resumes/{user}/{createTime}")
+    public ResponseEntity<Resume> deleteResume(@PathVariable("user") String user, @PathVariable("createTime") String createTime) {
+        System.out.println("Delete user = " + user + " createTime = " + createTime);
+        ResumeService.deleteResume(user, createTime);
 
         return ResponseEntity.noContent().build();
     }

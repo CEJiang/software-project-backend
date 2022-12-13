@@ -13,6 +13,7 @@ public class ChatController {
 
     @Autowired
     private WSService webSocketService;
+    
     @PostMapping("/private-message")
     public void sendMessage(@RequestBody InMessage request){
         // webSocketService.sendMessage(request.getReceiver(), request.getMessage());

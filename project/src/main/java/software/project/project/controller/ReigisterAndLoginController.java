@@ -20,7 +20,7 @@ public class ReigisterAndLoginController {
     private MemberService MemberService;
 
     @PostMapping("/register")
-    public void register(@RequestBody @Validated MemberAccount request) {
+    public void register(@RequestBody MemberAccount request) {
         try{
             MemberService.register(request);
         } catch(NotFoundException e){
@@ -30,14 +30,17 @@ public class ReigisterAndLoginController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody MemberAccount request){
+    public ResponseEntity<Token> login(@RequestBody MemberAccount request){
         try {
             String token = MemberService.login(request);
-            return ResponseEntity.ok().body(token);   
+            Token tokenObject = new Token(token);
+            
+            return ResponseEntity.ok().body(tokenObject);   
         } catch(NotFoundException e){
             throw new NotFoundException();
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("fail");
+            // return ResponseEntity.badRequest().body("fail");
+            return null;
         }
     }
 

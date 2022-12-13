@@ -16,8 +16,8 @@ public class ResumeService {
     @Autowired
     private ResumeRepository repository;
     
-    public Resume getResume(String user, int order) {
-        return repository.findByUserAndOrder(user, order);
+    public Resume getResume(String user, String createTime) {
+        return repository.findByUserAndCreateTime(user, createTime);
     }
 
     public List<Resume> getResume(String user) {
@@ -48,15 +48,14 @@ public class ResumeService {
                                    request.getId(), 
                                    request.getUser(), 
                                    time,
-                                   time,
-                                   0);
+                                   time);
 
 
         return repository.insert(Resume);
     }
     
-    public Resume replaceResume(String user, int order, Resume request) {
-        Resume oldResume = getResume(user, order);
+    public Resume replaceResume(String user, String createTime, Resume request) {
+        Resume oldResume = getResume(user, createTime);
         
         Resume Resume = new Resume(request.getTitle(), 
                                    request.getName(), 
@@ -77,20 +76,13 @@ public class ResumeService {
                                    oldResume.getId(), 
                                    oldResume.getUser(), 
                                    request.getCreateTime(),
-                                   getLocalTime(),
-                                   oldResume.getOrder());
+                                   getLocalTime());
 
         return repository.save(Resume);
     }
     
-    public void deleteResume(String user, int order) {
-        repository.deleteByUserAndOrder(user, order);
-        for(int i = 1; i < 5; ++i){
-            Resume oldResume = getResume(user, order + i);
-            if(oldResume == null) break;
-            oldResume.setOrder(oldResume.getOrder() - 1);
-            repository.save(oldResume);
-        }
+    public void deleteResume(String user, String createTime) {
+        repository.deleteByUserAndCreateTime(user, createTime);
     }
 
     private String getLocalTime(){

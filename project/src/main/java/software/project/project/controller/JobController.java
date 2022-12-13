@@ -22,9 +22,9 @@ import software.project.project.component.job.JobService;
 public class JobController {
     @Autowired
     private JobService JobService;
-    @GetMapping("/auth/Jobs/{user}/{order}")
-    public ResponseEntity<Job> getJob(@PathVariable("user") String user, @PathVariable("order") int order) {
-        Job Job = JobService.getJob(user, order);
+    @GetMapping("/auth/Jobs/{user}/{createTime}")
+    public ResponseEntity<Job> getJob(@PathVariable("user") String user, @PathVariable("createTime") String createTime) {
+        Job Job = JobService.getJob(user, createTime);
         System.out.println(Job);
         return ResponseEntity.ok(Job);
     }
@@ -55,19 +55,33 @@ public class JobController {
         return ResponseEntity.created(location).body(Job);
     }
 
-    @PutMapping("/auth/Jobs/{user}/{order}")
+    @PutMapping("/auth/Jobs/{user}/{createTime}")
     public ResponseEntity<Job> replaceJob(
-            @PathVariable("user") String user, @PathVariable("order") int order, @RequestBody Job request) {
-            Job Job = JobService.replaceJob(user, order, request);
+            @PathVariable("user") String user, @PathVariable("createTime") String createTime, @RequestBody Job request) {
+            Job Job = JobService.replaceJob(user, createTime, request);
 
         return ResponseEntity.ok(Job);
     }
 
-    @DeleteMapping("/auth/Jobs/{user}/{order}")
-    public ResponseEntity<Job> deleteJob(@PathVariable("user") String user, @PathVariable("order") int order) {
-        System.out.println("Delete user = " + user + " order = " + order);
-        JobService.deleteJob(user, order);
+    @DeleteMapping("/auth/Jobs/{user}/{createTime}")
+    public ResponseEntity<Job> deleteJob(@PathVariable("user") String user, @PathVariable("createTime") String createTime) {
+        System.out.println("Delete user = " + user + " createTime = " + createTime);
+        JobService.deleteJob(user, createTime);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("auth/Jobs/search")
+    public ResponseEntity<List<Job>> search(@RequestBody Object searchCondition){
+        List<Job> response = JobService.search(searchCondition);
+        
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("auth/Jobs/match")
+    public ResponseEntity<List<Job>> match(@RequestBody Object myJob){
+
+        return null;
     }
 }

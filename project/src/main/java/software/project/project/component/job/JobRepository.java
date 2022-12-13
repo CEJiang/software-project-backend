@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface JobRepository extends MongoRepository<Job, String> {
-    Job findByUserAndOrder(String user, int order);
+    Job findByUserAndCreateTime(String user, String createTime);
     List<Job> findByUser(String user);
-    Job deleteByUserAndOrder(String user, int order);
+    Job deleteByUserAndCreateTime(String user, String createTime);
 }

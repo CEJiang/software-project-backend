@@ -49,7 +49,7 @@ public class MailService {
 
         try {
             mailSender.send(message);
-            redisService.setRedis(request.getReceivers(), verifyCode);
+            redisService.setEmailRedis(request.getReceivers(), verifyCode);
         } catch (MailAuthenticationException e) {
             System.out.println(e.getMessage());
         } catch (Exception e) {
@@ -72,9 +72,9 @@ public class MailService {
     }
 
     public boolean mailCheck(String verifyCode, String email){
-        String redisVerifyCode = redisService.getRedis(email);
+        String redisVerifyCode = redisService.getEmailRedis(email);
         if(verifyCode.equals(redisVerifyCode)){
-            redisService.deleteRedis(email);
+            redisService.deleteEmailRedis(email);
             return true;
         } 
         else return false;

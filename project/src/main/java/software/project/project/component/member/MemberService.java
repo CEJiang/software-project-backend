@@ -1,15 +1,23 @@
 package software.project.project.component.member;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import software.project.project.component.Pair;
 import software.project.project.component.exception.NotFoundException;
+import software.project.project.component.job.Job;
+import software.project.project.component.job.JobRepository;
 import software.project.project.component.jwt.JwtMemberAccount;
 import software.project.project.component.jwt.JwtService;
 import software.project.project.component.jwt.JwtUserDetailsServiceImpl;
+import software.project.project.component.redis.RedisService;
+import software.project.project.component.resume.Resume;
+import software.project.project.component.resume.ResumeRepository;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,8 +33,18 @@ public class MemberService {
     private MemberRepository memberRepository;
     private JwtUserDetailsServiceImpl jwtUserDetailsServiceImpl;
     private JwtService jwtService;
+
+    @Autowired
+    private RedisService redisService;
+
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JobRepository jobRepository;
+
+    @Autowired 
+    private ResumeRepository resumeRepository;
 
     @Autowired
     public MemberService(
@@ -40,7 +58,7 @@ public class MemberService {
 
     public MemberAccount register(MemberAccount request) {
         
-        if(findMemberInformations(request) != null){
+        if(findMemberInformations(request.getUserID()) != null){
             throw new NotFoundException("");
         }
 
@@ -58,13 +76,16 @@ public class MemberService {
     }
 
     public String login(MemberAccount request){
+        
         JwtMemberAccount userDetails = jwtUserDetailsServiceImpl.loadUserByUsername(request.getUserID());
         Authentication authToken = new UsernamePasswordAuthenticationToken(request.getUserID(), request.getPassword());
-
+        
         Authentication auth = authenticationManager.authenticate(authToken);
+        
+        redisService.setMemberAccountRedis(request.getUserID(), findMemberInformations(request.getUserID()));
 
-        SecurityContextHolder.getContext().setAuthentication(auth); 
-
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        
         String token = jwtService.generateToken(userDetails);
 
         return token;
@@ -75,9 +96,63 @@ public class MemberService {
         String username = jwtService.getUserIDFromToken(oldToken);
         JwtMemberAccount user = (JwtMemberAccount) jwtUserDetailsServiceImpl.loadUserByUsername(username);
         String token = jwtService.refreshToken(user);
+
         return token;
     }
-    public MemberAccount findMemberInformations(MemberAccount request) {
-        return memberRepository.findByUserID(request.getUserID());
+
+    public MemberAccount findMemberInformations(String userID) {
+        return memberRepository.findByUserID(userID);
+    }
+
+    public void addJobCollect(String myUserID, String userID, String createTime){
+        MemberAccount member = redisService.getMemberAccountRedis(userID);
+        member.getJobColletList().add(new Pair(userID, createTime));
+
+        redisService.setMemberAccountRedis(userID, member);
+        memberRepository.save(member);
+    }
+
+    public void addResumeCollect(String myUserID, String userID, String createTime){
+        MemberAccount member = redisService.getMemberAccountRedis(userID);
+        member.getJobColletList().add(new Pair(userID, createTime));
+
+        redisService.setMemberAccountRedis(userID, member);
+        memberRepository.save(member);
+    }
+
+    public void removeJobCollect(String myUserID, String userID, String createTime){
+        MemberAccount member = redisService.getMemberAccountRedis(userID);
+        member.getJobColletList().removeIf((Pair a) -> a.getKey() == userID && a.getValue() == createTime);
+
+        redisService.setMemberAccountRedis(userID, member);
+        memberRepository.save(member);
+    }
+
+    public void removeResumeCollect(String myUserID, String userID, String createTime){
+        MemberAccount member = redisService.getMemberAccountRedis(userID);
+        member.getJobColletList().removeIf((Pair a) -> a.getKey() == userID && a.getValue() == createTime);
+        
+        redisService.setMemberAccountRedis(userID, member);
+        memberRepository.save(member);
+    }
+
+    public List<Job> getJobCollect(String userID) {
+        MemberAccount member = redisService.getMemberAccountRedis(userID);
+        List<Pair> jobIDCollect = member.getJobColletList();
+        List<Job> jobCollect = new ArrayList<>();
+        for(Pair job : jobIDCollect){
+            jobCollect.add(jobRepository.findByUserAndCreateTime(job.getKey(), job.getValue()));
+        }
+        return jobCollect;
+    }
+
+    public List<Resume> getResumeCollect(String userID) {
+        MemberAccount member = redisService.getMemberAccountRedis(userID);
+        List<Pair> resumeIDCollect = member.getResumeColletList();
+        List<Resume> resumeCollect = new ArrayList<>();
+        for(Pair resume : resumeIDCollect){
+            resumeCollect.add(resumeRepository.findByUserAndCreateTime(resume.getKey(), resume.getValue()));
+        }
+        return resumeCollect;
     }
 }

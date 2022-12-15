@@ -71,7 +71,7 @@ public class JobController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("auth/Jobs/search")
+    @PostMapping("/auth/Jobs/search")
     public ResponseEntity<List<Job>> search(@RequestBody Object searchCondition){
         List<Job> response = JobService.search(searchCondition);
         
@@ -79,7 +79,7 @@ public class JobController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("auth/Jobs/match")
+    @PostMapping("/auth/Jobs/match")
     public ResponseEntity<List<Job>> match(@RequestBody Object myJob){
 
         return null;

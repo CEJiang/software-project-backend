@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -68,12 +69,14 @@ public class JwtService {
         return (new Date( Instant.now().toEpochMilli() + EXPIRATION_TIME ));
     }
 
-    public String getUserIDFromToken(String token) {
+    public String getUserIDFromToken(String token) throws ExpiredJwtException{
         Claims claims = Jwts.parser()
-                            .setSigningKey(SECRET)
-                            .parseClaimsJws(token)
-                            .getBody();
-        return (String) claims.get("userID");                    
+                        .setSigningKey(SECRET)
+                        .parseClaimsJws(token)
+                        .getBody();
+        return (String) claims.get("userID");
+        
+                         
     }
 
     public String refreshToken(JwtMemberAccount userDetails){

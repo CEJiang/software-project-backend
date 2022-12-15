@@ -21,7 +21,7 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService{
     public JwtMemberAccount loadUserByUsername(String userID) throws UsernameNotFoundException {
 
         MemberAccount memberAccount = memberRepository.findByUserID(userID);
-
+        
         if(memberAccount == null){
             throw new NotFoundException("Not found member");
         } else{

@@ -16,6 +16,7 @@ import software.project.project.component.job.Job;
 import software.project.project.component.jwt.Token;
 import software.project.project.component.member.MemberAccount;
 import software.project.project.component.member.MemberService;
+import software.project.project.component.resume.Resume;
 
 @RestController
 public class ReigisterAndLoginController {
@@ -81,7 +82,7 @@ public class ReigisterAndLoginController {
         return MemberService.getJobCollect(userID);
     }
     @GetMapping("/auth/getResumeCollect/{userID}")
-    public List<Job> getResumeCollect(@PathVariable String userID){
+    public List<Resume> getResumeCollect(@PathVariable String userID){
         return MemberService.getResumeCollect(userID);
     }
 }

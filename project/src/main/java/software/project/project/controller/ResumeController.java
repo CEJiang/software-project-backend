@@ -20,23 +20,23 @@ import software.project.project.component.resume.ResumeService;
 @RestController
 public class ResumeController {
     @Autowired
-    private ResumeService ResumeService;
+    private ResumeService resumeService;
 
-    @GetMapping("/auth/Resumes/{user}/{createTime}")
-    public ResponseEntity<Resume> getResume(@PathVariable("user") String user, @PathVariable("createTime") String createTime) {
-        Resume Resume = ResumeService.getResume(user, createTime);
+    @GetMapping("/auth/Resumes/{userID}/{createTime}")
+    public ResponseEntity<Resume> getResume(@PathVariable("userID") String userID, @PathVariable("createTime") String createTime) {
+        Resume Resume = resumeService.getResume(userID, createTime);
         System.out.println(Resume);
         return ResponseEntity.ok(Resume);
     }
-    @GetMapping("/auth/Resumes/{user}")
-    public ResponseEntity<List<Resume>> getUserResume(@PathVariable("user") String user) {
-        List<Resume> Resumes = ResumeService.getResume(user);
+    @GetMapping("/auth/Resumes/getUserResumes/{userID}")
+    public ResponseEntity<List<Resume>> getUserResumes(@PathVariable("userID") String userID) {
+        List<Resume> Resumes = resumeService.getResumes(userID);
 
         return ResponseEntity.ok(Resumes);
     }
-    @GetMapping("/auth/Resumes")
-    public ResponseEntity<List<Resume>> getResumes() {
-        List<Resume> Resumes = ResumeService.getAllResume();
+    @GetMapping("/auth/Resumes/getAllResumes/{userID}")
+    public ResponseEntity<List<Resume>> getResumes(@PathVariable("userID") String userID) {
+        List<Resume> Resumes = resumeService.getAllResumes(userID);
 
         return ResponseEntity.ok(Resumes);
     }
@@ -44,7 +44,7 @@ public class ResumeController {
     @PostMapping("/auth/Resumes")
     public ResponseEntity<Resume> createResume(@RequestBody Resume request) {
         System.out.println("POST");
-        Resume Resume = ResumeService.createResume(request);
+        Resume Resume = resumeService.createResume(request);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -55,19 +55,24 @@ public class ResumeController {
         return ResponseEntity.created(location).body(Resume);
     }
 
-    @PutMapping("/auth/Resumes/{user}/{createTime}")
+    @PutMapping("/auth/Resumes/{userID}/{createTime}")
     public ResponseEntity<Resume> replaceResume(
-            @PathVariable("user") String user, @PathVariable("createTime") String createTime, @RequestBody Resume request) {
-            Resume Resume = ResumeService.replaceResume(user, createTime, request);
+            @PathVariable("userID") String userID, @PathVariable("createTime") String createTime, @RequestBody Resume request) {
+            Resume Resume = resumeService.replaceResume(userID, createTime, request);
 
         return ResponseEntity.ok(Resume);
     }
 
-    @DeleteMapping("/auth/Resumes/{user}/{createTime}")
-    public ResponseEntity<Resume> deleteResume(@PathVariable("user") String user, @PathVariable("createTime") String createTime) {
-        System.out.println("Delete user = " + user + " createTime = " + createTime);
-        ResumeService.deleteResume(user, createTime);
+    @DeleteMapping("/auth/Resumes/{userID}/{createTime}")
+    public ResponseEntity<Resume> deleteResume(@PathVariable("userID") String userID, @PathVariable("createTime") String createTime) {
+        System.out.println("Delete userID = " + userID + " createTime = " + createTime);
+        resumeService.deleteResume(userID, createTime);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/auth/Resumes/changeShelvesStatus/{userID}/{createTime}")
+    public void changeShelvesStatus(@PathVariable("userID") String userID, @PathVariable("createTime") String createTime){
+        resumeService.changeShelvesStatus(userID, createTime);
     }
 }

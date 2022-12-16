@@ -33,7 +33,6 @@ public class RedisService {
         try {
             String json = mapper.writeValueAsString(memberAccount);
             redisTemplate.opsForValue().set(userID, json);
-            redisTemplate.opsForValue().get(userID);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

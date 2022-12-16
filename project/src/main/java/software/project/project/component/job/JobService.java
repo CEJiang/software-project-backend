@@ -17,18 +17,21 @@ import software.project.project.component.resume.Resume;
 public class JobService {
 
     @Autowired
-    private JobRepository repository;
+    private JobRepository jobRepository;
     
-    public Job getJob(String user, String createTime) {
-        return repository.findByUserAndCreateTime(user, createTime);
+    public Job getJob(String userID, String createTime) {
+        return jobRepository.findByUserAndCreateTime(userID, createTime);
     }
 
-    public List<Job> getJob(String user) {
-        return repository.findByUser(user);
+    public List<Job> getJobs(String userID) {
+        return jobRepository.findByUser(userID);
     }
 
-    public List<Job> getAllJob(){
-        return repository.findAll();
+    public List<Job> getAllJobs(String userID){
+        List<Job> jobsList = jobRepository.findAll();
+        jobsList = jobsList.stream().filter((Job job) -> !(job.getUserID().equals(userID))).collect(Collectors.toList());
+
+        return jobsList;
     }
     
     public Job createJob(Job request) {
@@ -48,15 +51,16 @@ public class JobService {
                           request.getSalaryMethod(), 
                           request.getSalaryDate(), 
                           request.getId(), 
-                          request.getUser(), 
+                          request.getUserID(), 
                           time, 
-                          time);
+                          time,
+                          true);
 
-        return repository.insert(Job);
+        return jobRepository.insert(Job);
     }
     
-    public Job replaceJob(String user, String createTime, Job request) {
-        Job oldJob = getJob(user, createTime);
+    public Job replaceJob(String userID, String createTime, Job request) {
+        Job oldJob = getJob(userID, createTime);
 
         Job Job = new Job(request.getTitle(), 
                           request.getName(), 
@@ -73,20 +77,21 @@ public class JobService {
                           request.getSalaryMethod(), 
                           request.getSalaryDate(), 
                           oldJob.getId(), 
-                          oldJob.getUser(), 
+                          oldJob.getUserID(), 
                           request.getCreateTime(), 
-                          getLocalTime());
+                          getLocalTime(),
+                          request.getShelvesStatus());
 
-        return repository.save(Job);
+        return jobRepository.save(Job);
     }
     
-    public void deleteJob(String user, String createTime) {
-        repository.deleteByUserAndCreateTime(user, createTime);
+    public void deleteJob(String userID, String createTime) {
+        jobRepository.deleteByUserAndCreateTime(userID, createTime);
     }
 
-    public List<Job> search(Object searchCondition){
+    public List<Job> search(String userID, Object searchCondition){
         
-        List<Job> currentList = getAllJob();
+        List<Job> currentList = getAllJobs(userID);
 
         // 地區查詢
         currentList = currentList.stream().filter((Job job) -> job.getRegion().equals("台北市信義區")).collect(Collectors.toList());
@@ -102,8 +107,8 @@ public class JobService {
         return currentList;
     }
 
-    public List<Job> match(List<Resume> myResumes){
-        List<Job> currentList = getAllJob();
+    public List<Job> match(String userID, List<Resume> myResumes){
+        List<Job> currentList = getAllJobs(userID);
         
 
         for(Resume resume : myResumes){
@@ -117,6 +122,12 @@ public class JobService {
         return currentList;
     }
 
+    public void changeShelvesStatus(String userID, String createTime) {
+        Job job = getJob(userID, createTime);
+        job.setShelvesStatus(!job.getShelvesStatus());
+        jobRepository.save(job);
+    }
+
     private String getLocalTime(){
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
         Date currentDate = new Date();
@@ -128,4 +139,6 @@ public class JobService {
 
         return time;
     }
+
+    
 }

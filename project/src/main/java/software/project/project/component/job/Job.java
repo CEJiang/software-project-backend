@@ -36,9 +36,10 @@ public class Job {
 
     // 系統要求
     private String id; // MongoDB ID
-    private String user; // 用戶名
+    private String userID; // 用戶名
     private String createTime; // 創立時間
     private String refreshTime; // 更新時間
+    private Boolean shelvesStatus; // 上下架狀態
 
     // public Job(
     //     String title,

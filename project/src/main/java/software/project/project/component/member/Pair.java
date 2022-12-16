@@ -1,4 +1,4 @@
-package software.project.project.component;
+package software.project.project.component.member;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

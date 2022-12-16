@@ -1,7 +1,7 @@
 package software.project.project.component.member;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -10,12 +10,18 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import software.project.project.component.Pair;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Document("memberAccount")
 public class MemberAccount {
     @Id
@@ -37,13 +43,11 @@ public class MemberAccount {
 
     private List<String> roles;
 
-    private List<Pair> JobColletList;
-    private List<Pair> ResumeColletList;
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
+    private List<Pair> JobColletList = new ArrayList<>();;
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
+    private List<Pair> ResumeColletList = new ArrayList<>();;
 
-    @Override
-    public String toString(){
-        return email;
-    }
 }
 
 

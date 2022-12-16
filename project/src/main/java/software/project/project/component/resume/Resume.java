@@ -60,10 +60,7 @@ public class Resume {
     //     String region,
     //     String introduction,
     //     String id,
-    //     String user,
-    //     String createTime,
-    //     String refreshTime,
-    //     int order
+    //     String user
     // ){
     //     this.title = title;
     //     this.name = name;

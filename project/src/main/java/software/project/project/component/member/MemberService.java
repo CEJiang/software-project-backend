@@ -82,8 +82,11 @@ public class MemberService {
         
         Authentication auth = authenticationManager.authenticate(authToken);
         
-        redisService.setMemberAccountRedis(request.getUserID(), findMemberInformations(request.getUserID()));
-
+        System.out.println("getUserID = " + request.getUserID());
+        MemberAccount memberAccount = findMemberInformations(request.getUserID());
+        System.out.println(memberAccount.toString());
+        redisService.setMemberAccountRedis(request.getUserID(), memberAccount);
+        
         SecurityContextHolder.getContext().setAuthentication(auth);
         
         String token = jwtService.generateToken(userDetails);
@@ -105,34 +108,34 @@ public class MemberService {
     }
 
     public void addJobCollect(String myUserID, String userID, String createTime){
-        MemberAccount member = redisService.getMemberAccountRedis(userID);
+        MemberAccount member = redisService.getMemberAccountRedis(myUserID);
         member.getJobColletList().add(new Pair(userID, createTime));
 
-        redisService.setMemberAccountRedis(userID, member);
+        redisService.setMemberAccountRedis(myUserID, member);
         memberRepository.save(member);
     }
 
     public void addResumeCollect(String myUserID, String userID, String createTime){
-        MemberAccount member = redisService.getMemberAccountRedis(userID);
-        member.getJobColletList().add(new Pair(userID, createTime));
+        MemberAccount member = redisService.getMemberAccountRedis(myUserID);
+        member.getResumeColletList().add(new Pair(userID, createTime));
 
-        redisService.setMemberAccountRedis(userID, member);
+        redisService.setMemberAccountRedis(myUserID, member);
         memberRepository.save(member);
     }
 
     public void removeJobCollect(String myUserID, String userID, String createTime){
-        MemberAccount member = redisService.getMemberAccountRedis(userID);
-        member.getJobColletList().removeIf((Pair a) -> a.getKey() == userID && a.getValue() == createTime);
+        MemberAccount member = redisService.getMemberAccountRedis(myUserID);
+        member.getJobColletList().removeIf((Pair a) -> a.getKey().equals(userID) && a.getValue().equals(createTime));
 
-        redisService.setMemberAccountRedis(userID, member);
+        redisService.setMemberAccountRedis(myUserID, member);
         memberRepository.save(member);
     }
 
     public void removeResumeCollect(String myUserID, String userID, String createTime){
-        MemberAccount member = redisService.getMemberAccountRedis(userID);
-        member.getJobColletList().removeIf((Pair a) -> a.getKey() == userID && a.getValue() == createTime);
+        MemberAccount member = redisService.getMemberAccountRedis(myUserID);
+        member.getResumeColletList().removeIf((Pair a) -> a.getKey().equals(userID) && a.getValue().equals(createTime));
         
-        redisService.setMemberAccountRedis(userID, member);
+        redisService.setMemberAccountRedis(myUserID, member);
         memberRepository.save(member);
     }
 

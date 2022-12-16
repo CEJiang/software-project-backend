@@ -16,7 +16,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
 public class JwtService {
-    private final long EXPIRATION_TIME = 1 * 60 * 1000;
+    private final long EXPIRATION_TIME = 15 * 60 * 1000;
 
     @Value("${jwt.secret}")
     private String SECRET;

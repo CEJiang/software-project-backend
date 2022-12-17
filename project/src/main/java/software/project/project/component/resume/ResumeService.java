@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import software.project.project.component.job.Job;
+
 @Service
 public class ResumeService {
 
@@ -89,6 +91,36 @@ public class ResumeService {
     
     public void deleteResume(String userID, String createTime) {
         resumeRepository.deleteByUserAndCreateTime(userID, createTime);
+    }
+
+    public List<Resume> search(String userID, Object searchCondition){
+        
+        List<Resume> currentList = getAllResumes(userID);
+
+        // 地區查詢
+        currentList = currentList.stream().filter((Resume resume) -> resume.getRegion().equals("台北市信義區")).collect(Collectors.toList());
+
+        // 工作種類查詢
+        currentList = currentList.stream().filter((Resume resume) -> resume.getNature().equals("陪讀")).collect(Collectors.toList());
+        
+
+        // 關鍵字查詢
+        currentList = currentList.stream().filter((Resume resume) -> resume.getTitle().indexOf("家教") > 1 || resume.getIntroduction().indexOf("家教") > 1).collect(Collectors.toList());
+
+
+        return currentList;
+    }
+
+    public List<Resume> match(String userID, List<Job> myJobs){
+        List<Resume> currentList = getAllResumes(userID);
+        
+
+        for(Job job : myJobs){
+            // 地區、工作種類過濾
+            currentList = currentList.stream().filter((Resume resume) -> resume.getRegion().equals(job.getRegion()) && resume.getNature().equals(job.getNature())).collect(Collectors.toList());
+        }
+
+        return currentList;
     }
 
     public void changeShelvesStatus(String userID, String createTime) {

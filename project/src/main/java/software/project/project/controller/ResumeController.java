@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import software.project.project.component.job.Job;
+import software.project.project.component.job.JobService;
 import software.project.project.component.resume.Resume;
 import software.project.project.component.resume.ResumeService;
 
@@ -21,6 +23,9 @@ import software.project.project.component.resume.ResumeService;
 public class ResumeController {
     @Autowired
     private ResumeService resumeService;
+
+    @Autowired
+    private JobService jobService;
 
     @GetMapping("/auth/Resumes/{userID}/{createTime}")
     public ResponseEntity<Resume> getResume(@PathVariable("userID") String userID, @PathVariable("createTime") String createTime) {
@@ -74,5 +79,21 @@ public class ResumeController {
     @PostMapping("/auth/Resumes/changeShelvesStatus/{userID}/{createTime}")
     public void changeShelvesStatus(@PathVariable("userID") String userID, @PathVariable("createTime") String createTime){
         resumeService.changeShelvesStatus(userID, createTime);
+    }
+
+    @PostMapping("/auth/Resumes/search/{userID}")
+    public ResponseEntity<List<Resume>> search(@PathVariable("userID") String userID, @RequestBody Object searchCondition){
+        List<Resume> response = resumeService.search(userID, searchCondition);
+        
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/auth/Jobs/match/{userID}")
+    public ResponseEntity<List<Resume>> match(@PathVariable("userID") String userID){
+        List<Job> myJobs = jobService.getJobs(userID);
+        List<Resume> matchResumes = resumeService.match(userID, myJobs);
+
+        return ResponseEntity.ok(matchResumes);
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import software.project.project.component.Condition;
 import software.project.project.component.job.Job;
 import software.project.project.component.job.JobService;
 import software.project.project.component.resume.Resume;
@@ -82,7 +83,7 @@ public class ResumeController {
     }
 
     @PostMapping("/auth/Resumes/search/{userID}")
-    public ResponseEntity<List<Resume>> search(@PathVariable("userID") String userID, @RequestBody Object searchCondition){
+    public ResponseEntity<List<Resume>> search(@PathVariable("userID") String userID, @RequestBody Condition searchCondition){
         List<Resume> response = resumeService.search(userID, searchCondition);
         
 

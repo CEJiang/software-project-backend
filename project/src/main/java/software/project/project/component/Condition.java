@@ -1,18 +1,16 @@
 package software.project.project.component;
 
-import org.springframework.http.HttpStatus;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
 @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OutputMessage {
-    private String function;
-    private Object object;
-    private HttpStatus status;
+public class Condition {
+    List<String> searchCondition;
 }

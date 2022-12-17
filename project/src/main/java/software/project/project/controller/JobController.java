@@ -17,11 +17,16 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import software.project.project.component.job.Job;
 import software.project.project.component.job.JobService;
+import software.project.project.component.resume.Resume;
+import software.project.project.component.resume.ResumeService;
 
 @RestController
 public class JobController {
     @Autowired
     private JobService jobService;
+
+    @Autowired
+    private ResumeService resumeService;
     @GetMapping("/auth/Jobs/{userID}/{createTime}")
     public ResponseEntity<Job> getJob(@PathVariable("userID") String userID, @PathVariable("createTime") String createTime) {
         Job Job = jobService.getJob(userID, createTime);
@@ -86,8 +91,10 @@ public class JobController {
     }
 
     @PostMapping("/auth/Jobs/match/{userID}")
-    public ResponseEntity<List<Job>> match(@PathVariable("userID") String userID, @RequestBody Object myJob){
+    public ResponseEntity<List<Job>> match(@PathVariable("userID") String userID){
+        List<Resume> myResumes = resumeService.getResumes(userID);
+        List<Job> matchJobs = jobService.match(userID, myResumes);
 
-        return null;
+        return ResponseEntity.ok(matchJobs);
     }
 }

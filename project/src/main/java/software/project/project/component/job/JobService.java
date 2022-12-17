@@ -112,11 +112,8 @@ public class JobService {
         
 
         for(Resume resume : myResumes){
-            // 地區過濾
-            currentList = currentList.stream().filter((Job job) -> job.getRegion().equals(resume.getRegion())).collect(Collectors.toList());
-
-            // 工作種類過濾
-            currentList = currentList.stream().filter((Job job) -> job.getNature().equals(resume.getNature())).collect(Collectors.toList());
+            // 地區、工作種類過濾
+            currentList = currentList.stream().filter((Job job) -> job.getRegion().equals(resume.getRegion()) && job.getNature().equals(resume.getNature())).collect(Collectors.toList());
         }
 
         return currentList;

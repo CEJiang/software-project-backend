@@ -10,14 +10,12 @@ import org.springframework.stereotype.Service;
 
 import software.project.project.component.exception.NotFoundException;
 import software.project.project.component.job.Job;
-import software.project.project.component.job.JobRepository;
 import software.project.project.component.job.JobService;
 import software.project.project.component.jwt.JwtMemberAccount;
 import software.project.project.component.jwt.JwtService;
 import software.project.project.component.jwt.JwtUserDetailsServiceImpl;
 import software.project.project.component.redis.RedisService;
 import software.project.project.component.resume.Resume;
-import software.project.project.component.resume.ResumeRepository;
 import software.project.project.component.resume.ResumeService;
 
 import org.springframework.security.authentication.AuthenticationManager;

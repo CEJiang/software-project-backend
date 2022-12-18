@@ -10,7 +10,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -181,13 +180,13 @@ public class JobService {
     }
 
     private String getLocalTime(){
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss", Locale.US);
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         Date currentDate = new Date();
         Instant now = currentDate.toInstant();
         ZoneId currentZone = ZoneId.systemDefault();
         LocalDateTime localDateTime = LocalDateTime.ofInstant(now, currentZone);
-        System.out.println("Local date: " + localDateTime.format(format));
-        String time = localDateTime.format(format);
+        System.out.println("Local date: " + format.format(localDateTime));
+        String time = format.format(localDateTime);
 
         return time;
     }

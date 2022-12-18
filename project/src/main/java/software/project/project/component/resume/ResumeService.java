@@ -31,16 +31,16 @@ public class ResumeService {
     private ResumeRepository resumeRepository;
     
     public Resume getResume(String userID, String createTime) {
-        return resumeRepository.findByUserAndCreateTime(userID, createTime);
+        return resumeRepository.findByUserIDAndCreateTime(userID, createTime);
     }
 
     public List<Resume> getResumes(String userID) {
-        return resumeRepository.findByUser(userID);
+        return resumeRepository.findByUserID(userID);
     }
 
     public List<Resume> getAllResumes(String userID){
         List<Resume> resumesList = resumeRepository.findAll();
-        resumesList = resumesList.stream().filter((Resume resume) -> !(resume.getUser().equals(userID))).collect(Collectors.toList());
+        resumesList = resumesList.stream().filter((Resume resume) -> !(resume.getUserID().equals(userID))).collect(Collectors.toList());
 
         return resumesList;
     }
@@ -63,7 +63,7 @@ public class ResumeService {
                                    request.getRegion(), 
                                    request.getIntroduction(), 
                                    request.getId(), 
-                                   request.getUser(), 
+                                   request.getUserID(), 
                                    time,
                                    time,
                                    true);
@@ -92,7 +92,7 @@ public class ResumeService {
                                    request.getRegion(), 
                                    request.getIntroduction(), 
                                    oldResume.getId(), 
-                                   oldResume.getUser(), 
+                                   oldResume.getUserID(), 
                                    request.getCreateTime(),
                                    getLocalTime(),
                                    request.getShelvesStatus());
@@ -101,7 +101,7 @@ public class ResumeService {
     }
     
     public void deleteResume(String userID, String createTime) {
-        resumeRepository.deleteByUserAndCreateTime(userID, createTime);
+        resumeRepository.deleteByUserIDAndCreateTime(userID, createTime);
     }
 
     public List<Resume> search(String userID, Condition searchCondition){

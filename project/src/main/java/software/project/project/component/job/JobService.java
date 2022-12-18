@@ -10,6 +10,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -32,11 +33,11 @@ public class JobService {
     private JobRepository jobRepository;
     
     public Job getJob(String userID, String createTime) {
-        return jobRepository.findByUserAndCreateTime(userID, createTime);
+        return jobRepository.findByUserIDAndCreateTime(userID, createTime);
     }
 
     public List<Job> getJobs(String userID) {
-        return jobRepository.findByUser(userID);
+        return jobRepository.findByUserID(userID);
     }
 
     public List<Job> getAllJobs(String userID){
@@ -98,7 +99,7 @@ public class JobService {
     }
     
     public void deleteJob(String userID, String createTime) {
-        jobRepository.deleteByUserAndCreateTime(userID, createTime);
+        jobRepository.deleteByUserIDAndCreateTime(userID, createTime);
     }
 
     public List<Job> search(String userID, Condition searchCondition){
@@ -180,7 +181,7 @@ public class JobService {
     }
 
     private String getLocalTime(){
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss", Locale.US);
         Date currentDate = new Date();
         Instant now = currentDate.toInstant();
         ZoneId currentZone = ZoneId.systemDefault();

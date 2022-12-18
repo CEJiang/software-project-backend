@@ -55,7 +55,7 @@ public class ResumeController {
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{user}")
-                .buildAndExpand(Resume.getUser())
+                .buildAndExpand(Resume.getUserID())
                 .toUri();
 
         return ResponseEntity.created(location).body(Resume);
@@ -90,7 +90,7 @@ public class ResumeController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/auth/Jobs/match/{userID}")
+    @PostMapping("/auth/Resumes/match/{userID}")
     public ResponseEntity<List<Resume>> match(@PathVariable("userID") String userID){
         List<Job> myJobs = jobService.getJobs(userID);
         List<Resume> matchResumes = resumeService.match(userID, myJobs);

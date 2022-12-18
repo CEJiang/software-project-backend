@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ResumeRepository extends MongoRepository<Resume, String> {
-    Resume findByUserAndCreateTime(String user, String createTime);
-    List<Resume> findByUser(String user);
-    Resume deleteByUserAndCreateTime(String user, String createTime);
+    Resume findByUserIDAndCreateTime(String userID, String createTime);
+    List<Resume> findByUserID(String userID);
+    Resume deleteByUserIDAndCreateTime(String userID, String createTime);
 }

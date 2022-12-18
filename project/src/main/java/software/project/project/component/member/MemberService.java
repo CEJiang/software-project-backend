@@ -11,12 +11,14 @@ import org.springframework.stereotype.Service;
 import software.project.project.component.exception.NotFoundException;
 import software.project.project.component.job.Job;
 import software.project.project.component.job.JobRepository;
+import software.project.project.component.job.JobService;
 import software.project.project.component.jwt.JwtMemberAccount;
 import software.project.project.component.jwt.JwtService;
 import software.project.project.component.jwt.JwtUserDetailsServiceImpl;
 import software.project.project.component.redis.RedisService;
 import software.project.project.component.resume.Resume;
 import software.project.project.component.resume.ResumeRepository;
+import software.project.project.component.resume.ResumeService;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -40,10 +42,10 @@ public class MemberService {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private JobRepository jobRepository;
+    private JobService jobService;
 
     @Autowired 
-    private ResumeRepository resumeRepository;
+    private ResumeService resumeService;
 
     @Autowired
     public MemberService(
@@ -143,7 +145,7 @@ public class MemberService {
         List<Pair> jobIDCollect = member.getJobColletList();
         List<Job> jobCollect = new ArrayList<>();
         for(Pair job : jobIDCollect){
-            jobCollect.add(jobRepository.findByUserAndCreateTime(job.getKey(), job.getValue()));
+            jobCollect.add(jobService.getJob(job.getKey(), job.getValue()));
         }
         return jobCollect;
     }
@@ -153,7 +155,7 @@ public class MemberService {
         List<Pair> resumeIDCollect = member.getResumeColletList();
         List<Resume> resumeCollect = new ArrayList<>();
         for(Pair resume : resumeIDCollect){
-            resumeCollect.add(resumeRepository.findByUserAndCreateTime(resume.getKey(), resume.getValue()));
+            resumeCollect.add(resumeService.getResume(resume.getKey(), resume.getValue()));
         }
         return resumeCollect;
     }

@@ -28,6 +28,7 @@ public class JobController {
 
     @Autowired
     private ResumeService resumeService;
+    
     @GetMapping("/auth/Jobs/{userID}/{createTime}")
     public ResponseEntity<Job> getJob(@PathVariable("userID") String userID, @PathVariable("createTime") String createTime) {
         Job Job = jobService.getJob(userID, createTime);

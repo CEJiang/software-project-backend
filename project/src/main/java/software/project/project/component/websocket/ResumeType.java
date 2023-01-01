@@ -1,4 +1,4 @@
-package software.project.project.component.chat;
+package software.project.project.component.websocket;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,9 +9,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatMessage {
-    private String sender;
-    private String receiver;
-    private String Message;
+public class ResumeType {
+    private String userID;
     private String createTime;
 }

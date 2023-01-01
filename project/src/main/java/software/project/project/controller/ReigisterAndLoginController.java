@@ -11,11 +11,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
+import software.project.project.component.chat.Message;
 import software.project.project.component.exception.NotFoundException;
 import software.project.project.component.job.Job;
 import software.project.project.component.jwt.Token;
 import software.project.project.component.member.MemberAccount;
 import software.project.project.component.member.MemberService;
+import software.project.project.component.redis.RedisService;
 import software.project.project.component.resume.Resume;
 
 @RestController
@@ -23,6 +28,9 @@ public class ReigisterAndLoginController {
     
     @Autowired
     private MemberService MemberService;
+
+    @Autowired
+    private RedisService redisService;
     
     @PostMapping("/register")
     public void register(@RequestBody @Validated MemberAccount request) {
@@ -59,6 +67,12 @@ public class ReigisterAndLoginController {
         return ResponseEntity.ok().body(token);
     }
 
+    @GetMapping("/auth/getChatData/{userID}")
+    public ResponseEntity<List<Message>> getChatData(@PathVariable String userID) throws JsonMappingException, JsonProcessingException{
+        List<Message> messageList = redisService.getChatDataRedis(userID);
+        redisService.removeChatDataRedis(userID);
+        return ResponseEntity.ok(messageList);
+    }
 
     @PostMapping("/auth/addJobCollect/{myUserID}/{userID}/{createTime}")
     public void addJobCollect(@PathVariable String myUserID, @PathVariable String userID, @PathVariable String createTime){

@@ -1,5 +1,7 @@
 package software.project.project.component.redis;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +9,11 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import software.project.project.component.chat.Message;
 import software.project.project.component.member.MemberAccount;
 
 @Service
@@ -48,5 +53,29 @@ public class RedisService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public void setChatDataRedis(Message message) throws JsonMappingException, JsonProcessingException{
+        ObjectMapper mapper = new ObjectMapper();
+        List<Message> messageList = ((existRedis("message-" + message.getReceiver())) ? getChatDataRedis(message.getReceiver()) : new ArrayList<>());
+        messageList.add(message);
+        String json = mapper.writeValueAsString(messageList);
+        redisTemplate.opsForValue().set("message-" + message.getReceiver(), json);
+    }
+
+    public List<Message> getChatDataRedis(String userID) throws JsonMappingException, JsonProcessingException{
+        ObjectMapper mapper = new ObjectMapper();
+        String json = redisTemplate.opsForValue().get("message-" + userID);
+        List<Message> messageList = mapper.readValue(json, new TypeReference<List<Message>>(){});
+
+        return messageList;
+    }
+
+    public boolean existRedis(String key){
+        return redisTemplate.hasKey(key);
+    }
+
+    public void removeChatDataRedis(String userID) {
+        redisTemplate.delete("message-" + userID);
     }
 }

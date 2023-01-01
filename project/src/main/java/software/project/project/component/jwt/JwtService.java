@@ -16,70 +16,64 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
 public class JwtService {
-    private final long EXPIRATION_TIME = 15 * 60 * 1000;
+    private final long EXPIRATION_TIME = 60 * 60 * 1000;
 
     @Value("${jwt.secret}")
     private String SECRET;
 
-    
-    public String generateToken(JwtMemberAccount userDetails){
+    public String generateToken(JwtMemberAccount userDetails) {
 
         Map<String, Object> claims = new HashMap<>();
         claims.put("userID", userDetails.getUserID());
 
         return Jwts.builder()
-                    .setClaims(claims)
-                    .setExpiration(generateExpirationDate())
-                    .signWith(SignatureAlgorithm.HS512, SECRET)
-                    .compact();
+                .setClaims(claims)
+                .setExpiration(generateExpirationDate())
+                .signWith(SignatureAlgorithm.HS512, SECRET)
+                .compact();
     }
 
-    public boolean validateToken(String token, JwtMemberAccount JwtMemberAccount){
+    public boolean validateToken(String token, JwtMemberAccount JwtMemberAccount) {
         try {
             Jwts.parser()
-                .setSigningKey( SECRET )
-                .parseClaimsJws( token );
+                    .setSigningKey(SECRET)
+                    .parseClaimsJws(token);
             return true;
-        } catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
-        
-        
-        
+
         // catch (SignatureException e) {
-        //     throw new AuthException("Invalid JWT signature.");
+        // throw new AuthException("Invalid JWT signature.");
         // }
         // catch (MalformedJwtException e) {
-        //     throw new AuthException("Invalid JWT token.");
+        // throw new AuthException("Invalid JWT token.");
         // }
         // catch (ExpiredJwtException e) {
-        //     throw new AuthException("Expired JWT token");
+        // throw new AuthException("Expired JWT token");
         // }
         // catch (UnsupportedJwtException e) {
-        //     throw new AuthException("Unsupported JWT token");
+        // throw new AuthException("Unsupported JWT token");
         // }
         // catch (IllegalArgumentException e) {
-        //     throw new AuthException("JWT token compact of handler are invalid");
+        // throw new AuthException("JWT token compact of handler are invalid");
         // }
     }
 
-    
-
     private Date generateExpirationDate() {
-        return (new Date( Instant.now().toEpochMilli() + EXPIRATION_TIME ));
+        return (new Date(Instant.now().toEpochMilli() + EXPIRATION_TIME));
     }
 
-    public String getUserIDFromToken(String token) throws ExpiredJwtException{
+    public String getUserIDFromToken(String token) throws ExpiredJwtException {
         Claims claims = Jwts.parser()
-                        .setSigningKey(SECRET)
-                        .parseClaimsJws(token)
-                        .getBody();
+                .setSigningKey(SECRET)
+                .parseClaimsJws(token)
+                .getBody();
         return (String) claims.get("userID");
-        
-                         
+
     }
 
-    public String refreshToken(JwtMemberAccount userDetails){
+    public String refreshToken(JwtMemberAccount userDetails) {
 
         return generateToken(userDetails);
     }

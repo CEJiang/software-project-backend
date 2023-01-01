@@ -23,7 +23,7 @@ public class ReigisterAndLoginController {
     
     @Autowired
     private MemberService MemberService;
-
+    
     @PostMapping("/register")
     public void register(@RequestBody @Validated MemberAccount request) {
         try{

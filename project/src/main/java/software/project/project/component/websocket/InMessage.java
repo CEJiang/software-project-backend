@@ -13,4 +13,9 @@ public class InMessage {
     private String sender;
     private String receiver;
     private String message;
+
+    @Override
+    public String toString() {
+        return "sender = " + sender + "\nreceiver = " + receiver + "\nmessage = " + message;
+    }
 }

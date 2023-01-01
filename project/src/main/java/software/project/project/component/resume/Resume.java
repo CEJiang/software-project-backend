@@ -42,6 +42,7 @@ public class Resume {
     private String createTime; // 創立時間
     private String refreshTime; // 更新時間
     private Boolean shelvesStatus; // 上下架狀態
+    private Boolean collectStatus; // 收藏狀態
 
     // public Resume(
     //     String title,

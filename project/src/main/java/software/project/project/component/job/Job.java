@@ -23,11 +23,11 @@ public class Job {
     private String email; // 信箱
 
     // 工作條件
-    private String nature;   // 工作性質
+    private String nature; // 工作性質
     private String type; // 工作需求種類
     private String content; // 工作內容
-    private List<String> date; // 工作日期時間
-    private List<String> time; // 工作時段
+    private String date; // 工作日期時間
+    private String time; // 工作時段
     private String salary; // 薪資待遇
     private String region; // 工作地點
 
@@ -40,46 +40,45 @@ public class Job {
     private String createTime; // 創立時間
     private String refreshTime; // 更新時間
     private Boolean shelvesStatus; // 上下架狀態
-
+    private Boolean collectStatus; // 收藏狀態
     // public Job(
-    //     String title,
-    //     String name,
-    //     String sex,    
-    //     String phoneNumber,
-    //     String email,
-    //     String nature,
-    //     String type,
-    //     String content,
-    //     List<String> date,
-    //     List<String> time,
-    //     String salary,
-    //     String region,
-    //     String salaryMethod,
-    //     String salaryDate,
-    //     String id,
-    //     String user,
-    //     String createTime,
-    //     String refreshTime,
-    //     int order){
-    //         this.title = title;
-    //         this.name = name;
-    //         this.sex = sex;    
-    //         this.phoneNumber = phoneNumber;
-    //         this.email = email;
-    //         this.nature = nature;
-    //         this.type = type;
-    //         this.content = content;
-    //         this.date = date;
-    //         this.time = time;
-    //         this.salary = salary;
-    //         this.region = region;
-    //         this.salaryMethod = salaryMethod;
-    //         this.salaryDate = salaryDate;
-    //         this.id = id;
-    //         this.user = user;
-    //         this.createTime = createTime;
-    //         this.refreshTime = refreshTime;
-    //         this.order = order;
-    //     }
+    // String title,
+    // String name,
+    // String sex,
+    // String phoneNumber,
+    // String email,
+    // String nature,
+    // String type,
+    // String content,
+    // List<String> date,
+    // List<String> time,
+    // String salary,
+    // String region,
+    // String salaryMethod,
+    // String salaryDate,
+    // String id,
+    // String user,
+    // String createTime,
+    // String refreshTime,
+    // int order){
+    // this.title = title;
+    // this.name = name;
+    // this.sex = sex;
+    // this.phoneNumber = phoneNumber;
+    // this.email = email;
+    // this.nature = nature;
+    // this.type = type;
+    // this.content = content;
+    // this.date = date;
+    // this.time = time;
+    // this.salary = salary;
+    // this.region = region;
+    // this.salaryMethod = salaryMethod;
+    // this.salaryDate = salaryDate;
+    // this.id = id;
+    // this.user = user;
+    // this.createTime = createTime;
+    // this.refreshTime = refreshTime;
+    // this.order = order;
+    // }
 }
-

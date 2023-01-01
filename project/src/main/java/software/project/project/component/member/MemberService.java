@@ -108,6 +108,9 @@ public class MemberService {
 
     public void addJobCollect(String myUserID, String userID, String createTime){
         MemberAccount member = redisService.getMemberAccountRedis(myUserID);
+        if (member.getJobColletList().stream()
+                .anyMatch((Pair a) -> a.getKey().equals(userID) && a.getValue().equals(createTime)))
+            return;
         member.getJobColletList().add(new Pair(userID, createTime));
 
         redisService.setMemberAccountRedis(myUserID, member);
@@ -116,6 +119,9 @@ public class MemberService {
 
     public void addResumeCollect(String myUserID, String userID, String createTime){
         MemberAccount member = redisService.getMemberAccountRedis(myUserID);
+        if (member.getResumeColletList().stream()
+                .anyMatch((Pair a) -> a.getKey().equals(userID) && a.getValue().equals(createTime)))
+            return;
         member.getResumeColletList().add(new Pair(userID, createTime));
 
         redisService.setMemberAccountRedis(myUserID, member);

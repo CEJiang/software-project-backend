@@ -66,7 +66,7 @@ public class ResumeService {
 
     private boolean resumeColletExist(List<Pair> resumeCollect, String userID, String createTime) {
         return resumeCollect.stream()
-                .anyMatch((Pair a) -> a.getKey().equals(userID) && a.getValue().equals(createTime));
+                .anyMatch((Pair a) -> a.getUserID().equals(userID) && a.getCreateTime().equals(createTime));
     }
 
     public Resume createResume(Resume request) {

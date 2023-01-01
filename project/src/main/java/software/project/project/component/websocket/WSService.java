@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import software.project.project.component.chat.Message;
 import software.project.project.component.chat.MessageService;
+import software.project.project.component.member.Pair;
 import software.project.project.component.redis.RedisService;
 import software.project.project.component.resume.Resume;
 import software.project.project.component.resume.ResumeService;
@@ -57,8 +58,8 @@ public class WSService {
         
         if(message.getType().equals("resume")){
             ObjectMapper mapper = new ObjectMapper();
-            ResumeType resumeType = mapper.readValue(message.getMessage(), ResumeType.class);
-            Resume resume = resumeService.getResume(resumeType.getUserID(), resumeType.getCreateTime());
+            Pair pair = mapper.readValue(message.getMessage(), Pair.class);
+            Resume resume = resumeService.getResume(pair.getUserID(), pair.getCreateTime());
             message.setMessage(mapper.writeValueAsString(resume));
         }
 

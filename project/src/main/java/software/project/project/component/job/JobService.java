@@ -65,7 +65,7 @@ public class JobService {
     }
 
     private Boolean jobColletExist(List<Pair> jobCollect, String userID, String createTime) {
-        return jobCollect.stream().anyMatch((Pair a) -> a.getKey().equals(userID) && a.getValue().equals(createTime));
+        return jobCollect.stream().anyMatch((Pair a) -> a.getUserID().equals(userID) && a.getCreateTime().equals(createTime));
     }
 
     public Job createJob(Job request) {

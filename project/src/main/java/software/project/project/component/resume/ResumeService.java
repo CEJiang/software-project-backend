@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import software.project.project.component.Condition;
 import software.project.project.component.job.Job;
+import software.project.project.component.member.Condition;
 import software.project.project.component.member.MemberAccount;
 import software.project.project.component.member.MemberRepository;
 import software.project.project.component.member.Pair;

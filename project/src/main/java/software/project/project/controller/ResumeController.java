@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import software.project.project.component.Condition;
 import software.project.project.component.job.Job;
 import software.project.project.component.job.JobService;
+import software.project.project.component.member.Condition;
 import software.project.project.component.resume.Resume;
 import software.project.project.component.resume.ResumeService;
 

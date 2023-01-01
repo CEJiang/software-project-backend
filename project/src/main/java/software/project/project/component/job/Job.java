@@ -1,7 +1,5 @@
 package software.project.project.component.job;
 
-import java.util.List;
-
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;

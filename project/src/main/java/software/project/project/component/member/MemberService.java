@@ -45,7 +45,6 @@ public class MemberService {
     @Autowired 
     private ResumeService resumeService;
 
-    @Autowired
     public MemberService(
             JwtService jwtService,
             JwtUserDetailsServiceImpl jwtUserDetailsServiceImpl,

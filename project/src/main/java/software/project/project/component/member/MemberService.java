@@ -83,7 +83,7 @@ public class MemberService {
         System.out.println("getUserID = " + request.getUserID());
         MemberAccount memberAccount = findMemberInformations(request.getUserID());
         System.out.println(memberAccount.toString());
-        redisService.setMemberAccountRedis(request.getUserID(), memberAccount);
+        redisService.setMemberAccountRedis(memberAccount);
         
         SecurityContextHolder.getContext().setAuthentication(auth);
         
@@ -107,45 +107,45 @@ public class MemberService {
 
     public void addJobCollect(String myUserID, String userID, String createTime){
         MemberAccount member = redisService.getMemberAccountRedis(myUserID);
-        if (member.getJobColletList().stream()
+        if (member.getJobCollectList().stream()
                 .anyMatch((Pair a) -> a.getUserID().equals(userID) && a.getCreateTime().equals(createTime)))
             return;
-        member.getJobColletList().add(new Pair(userID, createTime));
+        member.getJobCollectList().add(new Pair(userID, createTime));
 
-        redisService.setMemberAccountRedis(myUserID, member);
+        redisService.setMemberAccountRedis(member);
         memberRepository.save(member);
     }
 
     public void addResumeCollect(String myUserID, String userID, String createTime){
         MemberAccount member = redisService.getMemberAccountRedis(myUserID);
-        if (member.getResumeColletList().stream()
+        if (member.getResumeCollectList().stream()
                 .anyMatch((Pair a) -> a.getUserID().equals(userID) && a.getCreateTime().equals(createTime)))
             return;
-        member.getResumeColletList().add(new Pair(userID, createTime));
+        member.getResumeCollectList().add(new Pair(userID, createTime));
 
-        redisService.setMemberAccountRedis(myUserID, member);
+        redisService.setMemberAccountRedis(member);
         memberRepository.save(member);
     }
 
     public void removeJobCollect(String myUserID, String userID, String createTime){
         MemberAccount member = redisService.getMemberAccountRedis(myUserID);
-        member.getJobColletList().removeIf((Pair a) -> a.getUserID().equals(userID) && a.getCreateTime().equals(createTime));
+        member.getJobCollectList().removeIf((Pair a) -> a.getUserID().equals(userID) && a.getCreateTime().equals(createTime));
 
-        redisService.setMemberAccountRedis(myUserID, member);
+        redisService.setMemberAccountRedis(member);
         memberRepository.save(member);
     }
 
     public void removeResumeCollect(String myUserID, String userID, String createTime){
         MemberAccount member = redisService.getMemberAccountRedis(myUserID);
-        member.getResumeColletList().removeIf((Pair a) -> a.getUserID().equals(userID) && a.getCreateTime().equals(createTime));
+        member.getResumeCollectList().removeIf((Pair a) -> a.getUserID().equals(userID) && a.getCreateTime().equals(createTime));
         
-        redisService.setMemberAccountRedis(myUserID, member);
+        redisService.setMemberAccountRedis(member);
         memberRepository.save(member);
     }
 
     public List<Job> getJobCollect(String userID) {
         MemberAccount member = redisService.getMemberAccountRedis(userID);
-        List<Pair> jobIDCollect = member.getJobColletList();
+        List<Pair> jobIDCollect = member.getJobCollectList();
         List<Job> jobCollect = new ArrayList<>();
         for(Pair job : jobIDCollect){
             jobCollect.add(jobService.getJob(job.getUserID(), job.getCreateTime()));
@@ -155,7 +155,7 @@ public class MemberService {
 
     public List<Resume> getResumeCollect(String userID) {
         MemberAccount member = redisService.getMemberAccountRedis(userID);
-        List<Pair> resumeIDCollect = member.getResumeColletList();
+        List<Pair> resumeIDCollect = member.getResumeCollectList();
         List<Resume> resumeCollect = new ArrayList<>();
         for(Pair resume : resumeIDCollect){
             resumeCollect.add(resumeService.getResume(resume.getUserID(), resume.getCreateTime()));

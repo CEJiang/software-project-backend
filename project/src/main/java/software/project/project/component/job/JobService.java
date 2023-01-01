@@ -54,17 +54,17 @@ public class JobService {
                 .filter((Job job) -> (job.getShelvesStatus()))
                 .collect(Collectors.toList());
         MemberAccount memberAccount = memberRepository.findByUserID(userID);
-        List<Pair> jobCollect = memberAccount.getJobColletList();
+        List<Pair> jobCollect = memberAccount.getJobCollectList();
         for (Job job : jobsList) {
             System.out.println(job.getUserID() + " " + job.getCreateTime());
-            if (jobColletExist(jobCollect, job.getUserID(), job.getCreateTime())) {
+            if (jobCollectExist(jobCollect, job.getUserID(), job.getCreateTime())) {
                 job.setCollectStatus(true);
             }
         }
         return jobsList;
     }
 
-    private Boolean jobColletExist(List<Pair> jobCollect, String userID, String createTime) {
+    private Boolean jobCollectExist(List<Pair> jobCollect, String userID, String createTime) {
         return jobCollect.stream().anyMatch((Pair a) -> a.getUserID().equals(userID) && a.getCreateTime().equals(createTime));
     }
 

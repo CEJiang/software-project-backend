@@ -53,10 +53,10 @@ public class ResumeService {
                 .collect(Collectors.toList());
 
         MemberAccount memberAccount = memberRepository.findByUserID(userID);
-        List<Pair> resumeCollect = memberAccount.getResumeColletList();
+        List<Pair> resumeCollect = memberAccount.getResumeCollectList();
         for (Resume resume : resumesList) {
             System.out.println(resume.getUserID() + " " + resume.getCreateTime());
-            if (resumeColletExist(resumeCollect, resume.getUserID(), resume.getCreateTime())) {
+            if (resumeCollectExist(resumeCollect, resume.getUserID(), resume.getCreateTime())) {
                 resume.setCollectStatus(true);
             }
         }
@@ -64,7 +64,7 @@ public class ResumeService {
         return resumesList;
     }
 
-    private boolean resumeColletExist(List<Pair> resumeCollect, String userID, String createTime) {
+    private boolean resumeCollectExist(List<Pair> resumeCollect, String userID, String createTime) {
         return resumeCollect.stream()
                 .anyMatch((Pair a) -> a.getUserID().equals(userID) && a.getCreateTime().equals(createTime));
     }

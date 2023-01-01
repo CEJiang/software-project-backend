@@ -43,11 +43,14 @@ public class MemberAccount {
     private List<String> roles;
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
-    private List<Pair> JobColletList = new ArrayList<>();;
+    private List<Pair> jobCollectList = new ArrayList<>();
+
     @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
-    private List<Pair> ResumeColletList = new ArrayList<>();;
+    private List<Pair> resumeCollectList = new ArrayList<>();
 
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
+    private List<Pair> jobComment = new ArrayList<>();
+
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
+    private List<Pair> resumeComment = new ArrayList<>();
 }
-
-
-

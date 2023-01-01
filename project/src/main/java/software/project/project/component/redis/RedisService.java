@@ -1,6 +1,9 @@
 package software.project.project.component.redis;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -33,11 +36,11 @@ public class RedisService {
         redisTemplate.delete(email);
     }
 
-    public void setMemberAccountRedis(String userID, MemberAccount memberAccount){
+    public void setMemberAccountRedis(MemberAccount memberAccount){
         ObjectMapper mapper = new ObjectMapper();
         try {
             String json = mapper.writeValueAsString(memberAccount);
-            redisTemplate.opsForValue().set(userID, json);
+            redisTemplate.opsForValue().set(memberAccount.getUserID(), json);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -66,16 +69,29 @@ public class RedisService {
     public List<Message> getChatDataRedis(String userID) throws JsonMappingException, JsonProcessingException{
         ObjectMapper mapper = new ObjectMapper();
         String json = redisTemplate.opsForValue().get("message-" + userID);
+        System.out.println(json);
         List<Message> messageList = mapper.readValue(json, new TypeReference<List<Message>>(){});
 
         return messageList;
+    }
+
+    public void removeChatDataRedis(String userID) {
+        redisTemplate.delete("message-" + userID);
     }
 
     public boolean existRedis(String key){
         return redisTemplate.hasKey(key);
     }
 
-    public void removeChatDataRedis(String userID) {
-        redisTemplate.delete("message-" + userID);
+    public void setCommetRedis(String resumeUserID, String resumeCreateTime, String jobUserID, String jobCreateTime, String time){
+        String key = "comment-" + resumeUserID + "-" + resumeCreateTime + "-" + jobUserID + "-" + jobCreateTime;
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		try {
+			long dateTime = sf.parse(time).getTime();
+            long date = new Date().getTime();
+            redisTemplate.opsForValue().set(key, "", (dateTime - date), TimeUnit.SECONDS);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
     }
 }

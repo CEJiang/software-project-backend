@@ -2,10 +2,10 @@ package software.project.project.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -24,7 +24,7 @@ public class WebsocketController {
     }
 
     @MessageMapping("/chat/addUser/{userID}")
-    public void addUser(@PathVariable("userID") String userID, SimpMessageHeaderAccessor simpMessageHeaderAccessor){
+    public void addUser(@DestinationVariable("userID") String userID, SimpMessageHeaderAccessor simpMessageHeaderAccessor){
         System.out.println(simpMessageHeaderAccessor.getSessionId());
         System.out.println(userID);
         ws.addUser(userID, simpMessageHeaderAccessor.getSessionId());

@@ -184,6 +184,7 @@ public class JobService {
                 // originCurrentList.stream().filter((Resume resume) ->
                 // resume.getNature().equals(searchStrings[1])).collect(Collectors.toList())
                 // );
+                
             }
 
             // 關鍵字查詢

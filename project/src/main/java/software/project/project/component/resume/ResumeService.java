@@ -80,7 +80,6 @@ public class ResumeService {
                 request.getSchool(),
                 request.getDepartment(),
                 request.getStatus(),
-                request.getYear(),
                 request.getNature(),
                 request.getType(),
                 request.getTime(),
@@ -101,6 +100,7 @@ public class ResumeService {
         Resume oldResume = getResume(userID, createTime);
         System.out.println("oldResume userID = " + oldResume.getUserID() + "\n");
         System.out.println("oldResume createTime = " + oldResume.getCreateTime() + "\n");
+        System.out.println("ID = " + oldResume.getId());
         Resume Resume = new Resume(request.getTitle(),
                 request.getName(),
                 request.getSex(),
@@ -110,7 +110,6 @@ public class ResumeService {
                 request.getSchool(),
                 request.getDepartment(),
                 request.getStatus(),
-                request.getYear(),
                 request.getNature(),
                 request.getType(),
                 request.getTime(),
@@ -119,10 +118,10 @@ public class ResumeService {
                 request.getIntroduction(),
                 oldResume.getId(),
                 oldResume.getUserID(),
-                request.getCreateTime(),
+                oldResume.getCreateTime(),
                 getLocalTime(),
-                request.getShelvesStatus(),
-                request.getCollectStatus());
+                oldResume.getShelvesStatus(),
+                oldResume.getCollectStatus());
 
         return resumeRepository.save(Resume);
     }

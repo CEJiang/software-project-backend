@@ -3,7 +3,9 @@ package software.project.project.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +17,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import software.project.project.component.chat.Message;
+import software.project.project.component.exception.MemberAccountExistException;
 import software.project.project.component.exception.NotFoundException;
 import software.project.project.component.job.Job;
 import software.project.project.component.jwt.Token;
@@ -33,28 +36,29 @@ public class ReigisterAndLoginController {
     private RedisService redisService;
     
     @PostMapping("/register")
-    public void register(@RequestBody @Validated MemberAccount request) {
-        try{
+    public ResponseEntity<String> register(@RequestBody @Validated MemberAccount request) {
+        try {
             MemberService.register(request);
-        } catch(NotFoundException e){
-            throw new NotFoundException();
+            return ResponseEntity.status(HttpStatus.OK).body("success");
+        } catch(MemberAccountExistException e){
+            // 帳號已存在
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("The UserID is used");
         }
-        
     }
 
     @PostMapping("/login")
     public ResponseEntity<Token> login(@RequestBody MemberAccount request){
         try {
             String token = MemberService.login(request);
-            
             Token tokenObject = new Token(token);
             
-            return ResponseEntity.ok().body(tokenObject);   
+            return ResponseEntity.status(HttpStatus.OK).body(tokenObject);   
         } catch(NotFoundException e){
-            throw new NotFoundException();
-        } catch (Exception e) {
-            // return ResponseEntity.badRequest().body("fail");
-            return null;
+            // 帳號不存在
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); 
+        } catch (BadCredentialsException e) {
+            // 密碼錯誤
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); 
         }
     }
 
@@ -64,13 +68,14 @@ public class ReigisterAndLoginController {
         
         String token = MemberService.refresh(oldToken.getToken());
 
-        return ResponseEntity.ok().body(token);
+        return ResponseEntity.status(HttpStatus.OK).body(token);
     }
 
     @GetMapping("/auth/getChatData/{userID}")
     public ResponseEntity<List<Message>> getChatData(@PathVariable String userID) throws JsonMappingException, JsonProcessingException{
         List<Message> messageList = redisService.getChatDataRedis(userID);
         redisService.removeChatDataRedis(userID);
+
         return ResponseEntity.ok(messageList);
     }
 
@@ -92,11 +97,11 @@ public class ReigisterAndLoginController {
     }
 
     @GetMapping("/auth/getJobCollect/{userID}")
-    public List<Job> getJobCollect(@PathVariable String userID){
-        return MemberService.getJobCollect(userID);
+    public ResponseEntity<List<Job>> getJobCollect(@PathVariable String userID){
+        return ResponseEntity.status(HttpStatus.OK).body(MemberService.getJobCollect(userID));
     }
     @GetMapping("/auth/getResumeCollect/{userID}")
-    public List<Resume> getResumeCollect(@PathVariable String userID){
-        return MemberService.getResumeCollect(userID);
+    public ResponseEntity<List<Resume>> getResumeCollect(@PathVariable String userID){
+        return ResponseEntity.status(HttpStatus.OK).body(MemberService.getResumeCollect(userID));
     }
 }

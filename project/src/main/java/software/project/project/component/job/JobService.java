@@ -113,10 +113,10 @@ public class JobService {
                 request.getSalaryDate(),
                 oldJob.getId(),
                 oldJob.getUserID(),
-                request.getCreateTime(),
+                oldJob.getCreateTime(),
                 getLocalTime(),
-                request.getShelvesStatus(),
-                request.getCollectStatus());
+                oldJob.getShelvesStatus(),
+                oldJob.getCollectStatus());
 
         return jobRepository.save(Job);
     }

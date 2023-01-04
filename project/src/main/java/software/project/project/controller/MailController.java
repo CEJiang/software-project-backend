@@ -2,6 +2,8 @@ package software.project.project.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.mail.SendFailedException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -39,8 +39,6 @@ public class Resume {
     private String department; // 科系名稱
     @NotNull
     private String status;  // 就學狀態
-    @NotNull
-    private String year; // 年級
 
     // 求職條件
     @NotNull

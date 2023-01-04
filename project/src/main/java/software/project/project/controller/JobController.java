@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -63,7 +62,7 @@ public class JobController {
         return ResponseEntity.created(location).body(Job);
     }
 
-    @PutMapping("/auth/Jobs/{userID}/{createTime}")
+    @PostMapping("/auth/Jobs/replace/{userID}/{createTime}")
     public ResponseEntity<Job> replaceJob(
             @PathVariable("userID") String userID, @PathVariable("createTime") String createTime, @RequestBody Job request) {
             Job Job = jobService.replaceJob(userID, createTime, request);

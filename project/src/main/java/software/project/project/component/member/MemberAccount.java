@@ -13,8 +13,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Getter;
 import lombok.Setter;
 
 @Getter
@@ -36,7 +36,7 @@ public class MemberAccount {
     @Email(message = "信箱格式錯誤")
     @NotNull
     private String email;
-
+    
     @NotNull
     private String password;
 

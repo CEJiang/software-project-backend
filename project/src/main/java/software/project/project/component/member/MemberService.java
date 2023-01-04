@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import software.project.project.component.exception.NotFoundException;
+import software.project.project.component.exception.MemberAccountExistException;
 import software.project.project.component.job.Job;
 import software.project.project.component.job.JobService;
 import software.project.project.component.jwt.JwtMemberAccount;
@@ -57,7 +57,7 @@ public class MemberService {
     public MemberAccount register(MemberAccount request) {
         
         if(findMemberInformations(request.getUserID()) != null){
-            throw new NotFoundException("");
+            throw new MemberAccountExistException("");
         }
 
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();

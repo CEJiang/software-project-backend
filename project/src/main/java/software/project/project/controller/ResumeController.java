@@ -61,9 +61,10 @@ public class ResumeController {
         return ResponseEntity.created(location).body(Resume);
     }
 
-    @PutMapping("/auth/Resumes/{userID}/{createTime}")
+    @PostMapping("/auth/Resumes/replace/{userID}/{createTime}")
     public ResponseEntity<Resume> replaceResume(
             @PathVariable("userID") String userID, @PathVariable("createTime") String createTime, @RequestBody Resume request) {
+        System.out.println("userID = " + userID + "\ncreateTime = " + createTime + "\n");
             Resume Resume = resumeService.replaceResume(userID, createTime, request);
 
         return ResponseEntity.ok(Resume);

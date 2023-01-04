@@ -36,7 +36,7 @@ public class RedisService {
         redisTemplate.delete(email);
     }
 
-    public void setMemberAccountRedis(MemberAccount memberAccount){
+    public void setMemberAccountRedis(MemberAccount memberAccount) {
         ObjectMapper mapper = new ObjectMapper();
         try {
             String json = mapper.writeValueAsString(memberAccount);
@@ -58,19 +58,25 @@ public class RedisService {
         }
     }
 
-    public void setChatDataRedis(Message message) throws JsonMappingException, JsonProcessingException{
+    public void setChatDataRedis(Message message) throws JsonMappingException, JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-        List<Message> messageList = ((existRedis("message-" + message.getReceiver())) ? getChatDataRedis(message.getReceiver()) : new ArrayList<>());
+        List<Message> messageList = ((existRedis("message-" + message.getReceiver()))
+                ? getChatDataRedis(message.getReceiver())
+                : new ArrayList<>());
         messageList.add(message);
         String json = mapper.writeValueAsString(messageList);
         redisTemplate.opsForValue().set("message-" + message.getReceiver(), json);
     }
 
-    public List<Message> getChatDataRedis(String userID) throws JsonMappingException, JsonProcessingException{
+    public List<Message> getChatDataRedis(String userID) throws JsonMappingException, JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-        String json = redisTemplate.opsForValue().get("message-" + userID);
-        System.out.println(json);
-        List<Message> messageList = mapper.readValue(json, new TypeReference<List<Message>>(){});
+        List<Message> messageList = new ArrayList<>();
+        if (redisTemplate.hasKey("message-" + userID)) {
+            String json = redisTemplate.opsForValue().get("message-" + userID);
+            System.out.println(json);
+            messageList = mapper.readValue(json, new TypeReference<List<Message>>() {
+            });
+        }
 
         return messageList;
     }
@@ -79,19 +85,20 @@ public class RedisService {
         redisTemplate.delete("message-" + userID);
     }
 
-    public boolean existRedis(String key){
+    public boolean existRedis(String key) {
         return redisTemplate.hasKey(key);
     }
 
-    public void setCommetRedis(String resumeUserID, String resumeCreateTime, String jobUserID, String jobCreateTime, String time){
+    public void setCommetRedis(String resumeUserID, String resumeCreateTime, String jobUserID, String jobCreateTime,
+            String time) {
         String key = "comment-" + resumeUserID + "-" + resumeCreateTime + "-" + jobUserID + "-" + jobCreateTime;
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		try {
-			long dateTime = sf.parse(time).getTime();
+        try {
+            long dateTime = sf.parse(time).getTime();
             long date = new Date().getTime();
             redisTemplate.opsForValue().set(key, "", (dateTime - date), TimeUnit.SECONDS);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 }
